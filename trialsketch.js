@@ -1,4 +1,6 @@
-// MUSIC VIDEO PROJECT (ELLIA, ISHAANA, NAOMI)
+// TITLE:
+// X: ORGANIC, Y: TECHNOLOGY
+// (ELLIA, ISHAANA, NAOMI)
 // We want to make interactive audio-visual experience combining video with audio-reactive rectangles
 // We want rectangles to move and pulse in response to music frequency and amplitude
 // We want each rectangle to display its real-time coordinate position
@@ -161,11 +163,11 @@ function draw() {
   textSize(18);
   noStroke();
   // Display amplitude (volume level) with 4 decimal places
-  text("AMP: " + level.toFixed(4), 10, height - 70);
+  text("AMP: " + level.toFixed(4), 10, height - 90);
   // Display first frequency bin value from spectrum array
-  text("FREQUENCY: " + spectrum[0], 10, height - 50);
+  text("FREQUENCY: " + spectrum[0], 10, height - 70);
   // Display status of audio using sound.isPlaying value
-  text("AUDIO PLAYING: " + sound.isPlaying(), 10, height - 40);
+  text("AUDIO PLAYING: " + sound.isPlaying(), 10, height - 50);
   // Display video playing status using the videoIsPlaying boolean variable
   text("VIDEO PLAYING: " + videoIsPlaying, 10, height - 30);
   // Display current video playback time in seconds with 2 decimal places
