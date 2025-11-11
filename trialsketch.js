@@ -10,7 +10,6 @@
 // Video and audio elements
 let vid;
 let sound;
-let sound2; // Second audio file
 let amp; // Amplitude analyzer to measure overall volume
 let fft; // FFT analyzer to measure frequency data
 let play = false; // Boolean to track play state
@@ -18,13 +17,11 @@ let rectangles = []; // Array to store all rectangle objects with their properti
 let videoIsPlaying = false; // Boolean to track if video is currently playing
 let hasStarted = false; // Boolean to track if audio has been started
 let words = ["freedom", "is", "now"]; // Array of words to display
-let currentSong = 1; // Track which song is currently playing
 
 function preload() {
-  // Load audio files before the sketch starts
-  // This ensures the sounds are ready when the program begins
+  // Load audio file before the sketch starts
+  // This ensures the sound is ready when the program begins
   sound = loadSound("assets/song01.mp3");
-  sound2 = loadSound("assets/song02.mp3");
 }
 
 function setup() {
@@ -60,11 +57,6 @@ function setup() {
   amp.smooth(0.9);
   // To create FFT analyzer to measure frequency spectrum data
   fft = new p5.FFT();
-
-  // AUDIO SEQUENCE SETUP
-  // Set up callbacks for when songs end to play next song automatically
-  sound.onended(playSong2);
-  sound2.onended(playSong1);
 
   // CREATE RECTANGLES
   // To generate rectangles with random properties
@@ -226,8 +218,8 @@ function draw() {
   text("AMP: " + level.toFixed(4), 10, height - 90);
   // Display first frequency bin value from spectrum array
   text("FREQUENCY: " + spectrum[0], 10, height - 70);
-  // Display which song is currently playing
-  text("CURRENT SONG: " + currentSong, 10, height - 50);
+  // Display status of audio using sound.isPlaying value
+  text("AUDIO PLAYING: " + sound.isPlaying(), 10, height - 50);
   // Display video playing status using the videoIsPlaying boolean variable
   text("VIDEO PLAYING: " + videoIsPlaying, 10, height - 30);
   // Display current video playback time in seconds with 2 decimal places
@@ -239,24 +231,11 @@ function draw() {
   textAlign(LEFT, CENTER);
   textSize(20);
   // if statement: check if audio has started and is playing
-  if (hasStarted == true && (sound.isPlaying() == true || sound2.isPlaying() == true)) {
+  if (hasStarted == true && sound.isPlaying() == true) {
     text("CLICK TO PAUSE", mouseX + 15, mouseY);
   } else {
     text("CLICK TO PLAY", mouseX + 15, mouseY);
   }
-}
-
-// SONG TRANSITION FUNCTIONS
-// Function to play song 2 when song 1 ends
-function playSong2() {
-  sound2.play();
-  currentSong = 2;
-}
-
-// Function to play song 1 when song 2 ends
-function playSong1() {
-  sound.play();
-  currentSong = 1;
 }
 
 // TOUCH INTERACTION
@@ -269,23 +248,13 @@ function touchStarted() {
   hasStarted = true;
 
   // TOGGLE AUDIO PLAYBACK
-  // if statement: check which song is playing and pause/play accordingly
-  if (currentSong == 1) {
-    // if statement: check if song 1 is currently playing
-    if (sound.isPlaying()) {
-      sound.pause();
-    } else {
-      sound.play();
-    }
+  // if statement: check if sound is currently playing. If sound is playing, pause it
+  if (sound.isPlaying()) {
+    sound.pause();
   } else {
-    // if statement: check if song 2 is currently playing
-    if (sound2.isPlaying()) {
-      sound2.pause();
-    } else {
-      sound2.play();
-    }
+    // If sound is not playing, start it and loop continuously
+    sound.loop();
   }
-  
   // Return false to prevent default touch behavior
   return false;
 }
