@@ -236,11 +236,13 @@ function draw() {
   textSize(18);
   noStroke();
   // Display amplitude (volume level) with 4 decimal places
-  text("AMP: " + level.toFixed(4), 10, height - 90);
+  text("AMP: " + level.toFixed(4), 10, height - 110);
   // Display first frequency bin value from spectrum array
-  text("FREQUENCY: " + spectrum[0], 10, height - 70);
+  text("FREQUENCY: " + spectrum[0], 10, height - 90);
   // Display which song is currently playing
-  text("CURRENT SONG: " + currentSong, 10, height - 50);
+  text("CURRENT SONG: " + currentSong, 10, height - 70);
+  // Display status of audio playing (checks if any of the three songs are playing)
+  text("AUDIO PLAYING: " + (sound.isPlaying() || sound2.isPlaying() || sound3.isPlaying()), 10, height - 50);
   // Display video playing status using the videoIsPlaying boolean variable
   text("VIDEO PLAYING: " + videoIsPlaying, 10, height - 30);
   // Display current video playback time in seconds with 2 decimal places
