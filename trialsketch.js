@@ -64,7 +64,7 @@ function setup() {
 
   // CREATE BUTTON
   // Create button in top right corner to switch audio
-  nextButton = createButton('>>>');
+  nextButton = createButton('NEXT AUDIO');
   // Position button in top right corner
   nextButton.position(width - 150, 20);
   // Style the button
