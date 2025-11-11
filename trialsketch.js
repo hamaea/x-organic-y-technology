@@ -173,6 +173,13 @@ function draw() {
   text("VIDEO PLAYING: " + videoIsPlaying, 10, height - 30);
   // Display current video playback time in seconds with 2 decimal places
   text("VIDEO TIME: " + vid.time().toFixed(2) + " sec", 10, height - 10);
+
+  // CURSOR FOLLOWING TEXT
+  // Display "click to experience" text that follows the mouse cursor
+  fill(0);
+  textAlign(LEFT, CENTER);
+  textSize(20);
+  text("CLICK TO EXPERIENCE", mouseX + 15, mouseY);
 }
 
 // TOUCH INTERACTION
