@@ -15,6 +15,7 @@ let fft; // FFT analyzer to measure frequency data
 let play = false; // Boolean to track play state
 let rectangles = []; // Array to store all rectangle objects with their properties
 let videoIsPlaying = false; // Boolean to track if video is currently playing
+let hasStarted = false; // Boolean to track if audio has been started
 
 function preload() {
   // Load audio file before the sketch starts
@@ -70,7 +71,10 @@ function setup() {
       size: size, // Base size of rectangle
       speedX: random(-1.5, 1.5), // Horizontal movement speed (negative = left, positive = right)
       speedY: random(-1.5, 1.5), // Vertical movement speed (negative = up, positive = down)
-      sensitivity: random(0.5, 2) // To measure how much the rectangle reacts to audio (higher = more reactive)
+      sensitivity: random(0.5, 2), // To measure how much the rectangle reacts to audio (higher = more reactive)
+      showText: false, // Boolean to control if text is visible
+      textTimer: 0, // Timer to track when to show text
+      nextDisplay: random(60, 180) // Random interval for when text appears (in frames)
     });
   }
 
@@ -97,7 +101,7 @@ function draw() {
   // Analyze frequency spectrum (returns array of 1024 frequency values from 0 to 255)
   let spectrum = fft.analyze();
 
-  // DRAW RECTANGLES WITH COORDINATE TEXT
+  // DRAW RECTANGLES WITH TEXT PHRASES
   // Use push() to save current drawing settings
   push();
   // Set blend mode to DIFFERENCE for visual effect with video
@@ -108,7 +112,7 @@ function draw() {
   for (let i = 0; i < rectangles.length; i++) {
     // UPDATE POSITION
     // Move rectangle horizontally based on its speed and audio level
-    // Multiplying by (1 + level * 20) makes movement faster when music is louder
+    // Multiplying by (1 + level * 5) makes movement faster when music is louder
     rectangles[i].x += rectangles[i].speedX * (1 + level * 5);
     // Move rectangle vertically based on its speed and audio level
     rectangles[i].y += rectangles[i].speedY * (1 + level * 5);
@@ -141,16 +145,39 @@ function draw() {
     // Draw rectangle at its current position and size
     rect(rectangles[i].x, rectangles[i].y, rectangles[i].size, rectangles[i].size);
 
-    // DRAW COORDINATE TEXT
-    // Set text color to red
-    fill(0, 255, 255);
-    textSize(18);
-    // Display x and y coordinates on a single line above the rectangle like (x:value, y:value)
-    // int() converts coordinates to whole numbers (removes decimals)
-    // Text is positioned above the rectangle by subtracting half the size plus offset
-    text("x: " + int(rectangles[i].x) + ", " + "y: " + int(rectangles[i].y),
-      rectangles[i].x,
-      rectangles[i].y - rectangles[i].size / 2 - 15);
+    // TEXT DISPLAY LOGIC
+    // Increment timer for each rectangle
+    rectangles[i].textTimer++;
+    
+    // if statement: check if timer reached the next display interval
+    if (rectangles[i].textTimer >= rectangles[i].nextDisplay) {
+      // Show text for this rectangle
+      rectangles[i].showText = true;
+      // Reset timer
+      rectangles[i].textTimer = 0;
+    }
+    
+    // if statement: check if text should be visible and hide it after 120 frames (2 seconds)
+    if (rectangles[i].showText == true && rectangles[i].textTimer > 120) {
+      // Hide text
+      rectangles[i].showText = false;
+      // Set new random interval for next display
+      rectangles[i].nextDisplay = random(60, 180);
+      // Reset timer
+      rectangles[i].textTimer = 0;
+    }
+    
+    // DRAW TEXT PHRASE
+    // if statement: check if text should be displayed for this rectangle
+    if (rectangles[i].showText == true) {
+      // Set text color to cyan
+      fill(0, 255, 255);
+      textSize(14);
+      // Display phrase above the rectangle
+      text("remember you too are in motion",
+        rectangles[i].x,
+        rectangles[i].y - rectangles[i].size / 2 - 15);
+    }
   }
   // Use pop() to restore previous drawing settings
   pop(); // End DIFFERENCE blend mode
@@ -175,11 +202,16 @@ function draw() {
   text("VIDEO TIME: " + vid.time().toFixed(2) + " sec", 10, height - 10);
 
   // CURSOR FOLLOWING TEXT
-  // Display "click to experience" text that follows the mouse cursor
-  fill(0);
+  // Display text that changes based on audio state
+  fill(255, 0, 0);
   textAlign(LEFT, CENTER);
   textSize(20);
-  text("CLICK TO EXPERIENCE", mouseX + 15, mouseY);
+  // if statement: check if audio has started and is playing
+  if (hasStarted == true && sound.isPlaying() == true) {
+    text("click to pause", mouseX + 15, mouseY);
+  } else {
+    text("click to play", mouseX + 15, mouseY);
+  }
 }
 
 // TOUCH INTERACTION
@@ -187,11 +219,13 @@ function draw() {
 function touchStarted() {
   // Enable audio context (required by web browsers before playing sound)
   userStartAudio();
+  
+  // Set hasStarted to true on first click
+  hasStarted = true;
 
   // TOGGLE AUDIO PLAYBACK
   // if statement: check if sound is currently playing. If sound is playing, pause it
   if (sound.isPlaying()) {
-
     sound.pause();
   } else {
     // If sound is not playing, start it and loop continuously
