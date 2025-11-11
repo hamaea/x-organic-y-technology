@@ -252,7 +252,7 @@ function draw() {
   // Display text that changes based on audio state
   fill(255, 0, 0);
   textAlign(LEFT, CENTER);
-  textSize(20);
+  textSize(15);
   // if statement: check if audio has started and is playing
   if (hasStarted == true && (sound.isPlaying() == true || sound2.isPlaying() == true || sound3.isPlaying() == true)) {
     text("CLICK TO PAUSE", mouseX + 15, mouseY);
