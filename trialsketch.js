@@ -16,7 +16,7 @@ let play = false; // Boolean to track play state
 let rectangles = []; // Array to store all rectangle objects with their properties
 let videoIsPlaying = false; // Boolean to track if video is currently playing
 let hasStarted = false; // Boolean to track if audio has been started
-let words = ["remember", "you", "too", "are", "in", "motion"]; // Array of words to display
+let words = ["freedom", "is", "now"]; // Array of words to display
 
 function preload() {
   // Load audio file before the sketch starts
