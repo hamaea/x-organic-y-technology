@@ -17,7 +17,7 @@ let play = false; // Boolean to track play state
 let rectangles = []; // Array to store all rectangle objects with their properties
 let videoIsPlaying = false; // Boolean to track if video is currently playing
 let hasStarted = false; // Boolean to track if audio has been started
-let words = ["freedom", "is", "now"]; // Array of words to display
+let words = ["freedom", "is", "now"]; // Array of words to display for song 1
 let currentSong = 1; // Track which song is currently playing (1 or 2)
 let nextButton; // Button to switch to next audio
 
@@ -25,7 +25,7 @@ function preload() {
   // Load audio files before the sketch starts
   // This ensures the sounds are ready when the program begins
   sound = loadSound("assets/song01.mp3");
-  sound2 = loadSound("assets/song03.mp3");
+  sound2 = loadSound("assets/song02.mp3");
 }
 
 function setup() {
@@ -266,11 +266,15 @@ function switchAudio() {
     sound.stop();
     sound2.loop();
     currentSong = 2;
+    // Change words to "break the pattern" for song 2
+    words = ["break", "the", "pattern"];
   } else {
     // Stop song 2 and play song 1
     sound2.stop();
     sound.loop();
     currentSong = 1;
+    // Change words back to "freedom is now" for song 1
+    words = ["freedom", "is", "now"];
   }
   // Set hasStarted to true since audio is now playing
   hasStarted = true;
