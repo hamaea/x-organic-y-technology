@@ -27,7 +27,7 @@ function preload() {
   // This ensures the sounds are ready when the program begins
   sound = loadSound("assets/song01.mp3");
   sound2 = loadSound("assets/song03.mp3");
-  sound3 = loadLoad("assets/song04.mp3");
+  sound3 = loadSound("assets/song04.mp3");
 }
 
 function setup() {
@@ -236,13 +236,11 @@ function draw() {
   textSize(18);
   noStroke();
   // Display amplitude (volume level) with 4 decimal places
-  text("AMP: " + level.toFixed(4), 10, height - 110);
+  text("AMP: " + level.toFixed(4), 10, height - 90);
   // Display first frequency bin value from spectrum array
-  text("FREQUENCY: " + spectrum[0], 10, height - 90);
+  text("FREQUENCY: " + spectrum[0], 10, height - 70);
   // Display which song is currently playing
-  text("CURRENT SONG: " + currentSong, 10, height - 70);
-  // Display status of audio playing
-  text("AUDIO PLAYING: " + (sound.isPlaying() || sound2.isPlaying() || sound3.isPlaying()), 10, height - 50);
+  text("CURRENT SONG: " + currentSong, 10, height - 50);
   // Display video playing status using the videoIsPlaying boolean variable
   text("VIDEO PLAYING: " + videoIsPlaying, 10, height - 30);
   // Display current video playback time in seconds with 2 decimal places
