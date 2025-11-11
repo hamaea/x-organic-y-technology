@@ -21,6 +21,8 @@ let hasStarted = false; // Boolean to track if audio has been started
 let words = ["freedom", "is", "now"]; // Array of words to display for song 1
 let currentSong = 1; // Track which song is currently playing (1, 2, or 3)
 let nextButton; // Button to switch to next audio
+let playButton; // Button to play audio
+let pauseButton; // Button to pause audio
 
 function preload() {
   // Load audio files before the sketch starts
@@ -64,7 +66,7 @@ function setup() {
   // To create FFT analyzer to measure frequency spectrum data
   fft = new p5.FFT();
 
-  // CREATE BUTTON
+  // CREATE NEXT AUDIO BUTTON
   // Create button in top right corner to switch audio
   nextButton = createButton('NEXT AUDIO');
   // Position button in top right corner
@@ -78,6 +80,38 @@ function setup() {
   nextButton.style('cursor', 'pointer');
   // Set what happens when button is clicked
   nextButton.mousePressed(switchAudio);
+
+  // CREATE PLAY BUTTON
+  // Create play button below the next audio button
+  playButton = createButton('PLAY');
+  // Position button below next audio button
+  playButton.position(width - 180, 70);
+  // Style the button
+  playButton.style('background-color', '#FF0000');
+  playButton.style('color', '#FFFFFF');
+  playButton.style('border', 'none');
+  playButton.style('padding', '10px 20px');
+  playButton.style('font-size', '16px');
+  playButton.style('cursor', 'pointer');
+  playButton.style('width', '85px');
+  // Set what happens when button is clicked
+  playButton.mousePressed(playAudio);
+
+  // CREATE PAUSE BUTTON
+  // Create pause button next to play button
+  pauseButton = createButton('PAUSE');
+  // Position button next to play button
+  pauseButton.position(width - 85, 70);
+  // Style the button
+  pauseButton.style('background-color', '#FF0000');
+  pauseButton.style('color', '#FFFFFF');
+  pauseButton.style('border', 'none');
+  pauseButton.style('padding', '10px 20px');
+  pauseButton.style('font-size', '16px');
+  pauseButton.style('cursor', 'pointer');
+  pauseButton.style('width', '85px');
+  // Set what happens when button is clicked
+  pauseButton.mousePressed(pauseAudio);
 
   // CREATE RECTANGLES
   // To generate rectangles with random properties
@@ -247,22 +281,10 @@ function draw() {
   text("VIDEO PLAYING: " + videoIsPlaying, 10, height - 30);
   // Display current video playback time in seconds with 2 decimal places
   text("VIDEO TIME: " + vid.time().toFixed(2) + " sec", 10, height - 10);
-
-  // CURSOR FOLLOWING TEXT
-  // Display text that changes based on audio state
-  fill(255, 0, 0);
-  textAlign(LEFT, CENTER);
-  textSize(20);
-  // if statement: check if audio has started and is playing
-  if (hasStarted == true && (sound.isPlaying() == true || sound2.isPlaying() == true || sound3.isPlaying() == true)) {
-    text("CLICK TO PAUSE", mouseX + 15, mouseY);
-  } else {
-    text("CLICK TO PLAY", mouseX + 15, mouseY);
-  }
 }
 
 // SWITCH AUDIO FUNCTION
-// Function that runs when "EXPLORE MORE" button is clicked
+// Function that runs when "NEXT AUDIO" button is clicked
 function switchAudio() {
   // if statement: check which song is currently playing and cycle through
   if (currentSong == 1) {
@@ -289,6 +311,38 @@ function switchAudio() {
   }
   // Set hasStarted to true since audio is now playing
   hasStarted = true;
+}
+
+// PLAY AUDIO FUNCTION
+// Function that runs when "PLAY" button is clicked
+function playAudio() {
+  // Enable audio context (required by web browsers before playing sound)
+  userStartAudio();
+  
+  // Set hasStarted to true
+  hasStarted = true;
+  
+  // if statement: check which song should be playing and start it
+  if (currentSong == 1) {
+    sound.loop();
+  } else if (currentSong == 2) {
+    sound2.loop();
+  } else {
+    sound3.loop();
+  }
+}
+
+// PAUSE AUDIO FUNCTION
+// Function that runs when "PAUSE" button is clicked
+function pauseAudio() {
+  // if statement: check which song is playing and pause it
+  if (currentSong == 1) {
+    sound.pause();
+  } else if (currentSong == 2) {
+    sound2.pause();
+  } else {
+    sound3.pause();
+  }
 }
 
 // TOUCH INTERACTION
