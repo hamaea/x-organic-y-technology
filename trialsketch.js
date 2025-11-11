@@ -26,8 +26,8 @@ function preload() {
   // Load audio files before the sketch starts
   // This ensures the sounds are ready when the program begins
   sound = loadSound("assets/song01.mp3");
-  sound2 = loadLoad("assets/song03.mp3");
-  sound3 = loadSound("assets/song04.mp3");
+  sound2 = loadSound("assets/song03.mp3");
+  sound3 = loadLoad("assets/song04.mp3");
 }
 
 function setup() {
