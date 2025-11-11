@@ -1,6 +1,6 @@
+// (ELLIA, ISHAANA, NAOMI)
 // TITLE:
 // X: ORGANIC, Y: TECHNOLOGY
-// (ELLIA, ISHAANA, NAOMI)
 // We want to make interactive audio-visual experience combining video with audio-reactive rectangles
 // We want rectangles to move and pulse in response to music frequency and amplitude
 // We want each rectangle to display its real-time coordinate position
@@ -27,39 +27,39 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   // VIDEO SETUP
-  // Create video element with autoplay capabilities
+  // To create video element with autoplay capabilities
   vid = createVideo("assets/finalvideo.mp4");
-  // To Set video size to match canvas dimensions
+  // To set video size to match canvas dimensions
   vid.size(width, height);
-  // Hide the default HTML video element (we'll draw it on canvas instead)
+  // To hide the default HTML video element (we'll draw it on canvas instead)
   vid.hide();
-  // Mute the video's audio track (we use separate audio file)
+  // To mute the video's audio track (we use separate audio file)
   vid.volume(0);
-  // Set muted attribute - this is required for autoplay to work in browsers
+  // To set muted attribute - this is required for autoplay to work in browsers
   vid.attribute('muted', '');
-  // Set playsinline attribute - this is required for autoplay on mobile devices
+  // To set playsinline attribute - this is required for autoplay on mobile devices
   vid.attribute('playsinline', '');
-  // Enable autoplay so video starts immediately
+  // To enable autoplay so video starts immediately
   vid.autoplay(true);
-  // Loop video continuously
+  // To loop video continuously
   vid.loop();
-  // Set videoIsPlaying to true since video starts automatically
+  // To set videoIsPlaying to true since video starts automatically
   videoIsPlaying = true;
 
   // Console log to confirm video element was created successfully
   console.log("Video element created:", vid);
 
   // AUDIO ANALYSIS SETUP
-  // Create amplitude analyzer to measure overall loudness (0 to 1)
+  // To create amplitude analyzer to measure overall loudness (0 to 1)
   amp = new p5.Amplitude();
-  // Create FFT analyzer to measure frequency spectrum data
+  // To create FFT analyzer to measure frequency spectrum data
   fft = new p5.FFT();
 
   // CREATE RECTANGLES
-  // To generate 12 rectangles with random properties
+  // To generate rectangles with random properties
   // We use for-loop to create multiple rectangles efficiently
   // Instead of writing the same code 12 times, the loop does it for us
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 8; i++) {
     // To generate random size for each rectangle
     let size = random(20, 80);
     // Add new rectangle object to the array with all its properties
@@ -67,8 +67,8 @@ function setup() {
       x: random(width), // Random starting x position
       y: random(height), // Random starting y position
       size: size, // Base size of rectangle
-      speedX: random(-3, 3), // Horizontal movement speed (negative = left, positive = right)
-      speedY: random(-3, 3), // Vertical movement speed (negative = up, positive = down)
+      speedX: random(-1.5, 1.5), // Horizontal movement speed (negative = left, positive = right)
+      speedY: random(-1.5, 1.5), // Vertical movement speed (negative = up, positive = down)
       sensitivity: random(0.5, 2) // To measure how much the rectangle reacts to audio (higher = more reactive)
     });
   }
@@ -81,8 +81,8 @@ function setup() {
 }
 
 function draw() {
-  // BACKGROUND (GREY)
-  background(220);
+  // BACKGROUND
+  background(255);
 
   // VIDEO DISPLAY
   // Set image drawing mode to corner (draws from top-left corner)
@@ -108,9 +108,9 @@ function draw() {
     // UPDATE POSITION
     // Move rectangle horizontally based on its speed and audio level
     // Multiplying by (1 + level * 20) makes movement faster when music is louder
-    rectangles[i].x += rectangles[i].speedX * (1 + level * 20);
+    rectangles[i].x += rectangles[i].speedX * (1 + level * 10);
     // Move rectangle vertically based on its speed and audio level
-    rectangles[i].y += rectangles[i].speedY * (1 + level * 20);
+    rectangles[i].y += rectangles[i].speedY * (1 + level * 10);
 
     // WRAP AROUND SCREEN EDGES
     // if statement: check if rectangle moves past right edge
