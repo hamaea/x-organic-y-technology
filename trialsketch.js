@@ -16,6 +16,7 @@ let play = false; // Boolean to track play state
 let rectangles = []; // Array to store all rectangle objects with their properties
 let videoIsPlaying = false; // Boolean to track if video is currently playing
 let hasStarted = false; // Boolean to track if audio has been started
+let words = ["remember", "you", "too", "are", "in", "motion"]; // Array of words to display
 
 function preload() {
   // Load audio file before the sketch starts
@@ -74,7 +75,8 @@ function setup() {
       sensitivity: random(0.5, 2), // To measure how much the rectangle reacts to audio (higher = more reactive)
       showText: false, // Boolean to control if text is visible
       textTimer: 0, // Timer to track when to show text
-      nextDisplay: random(60, 180) // Random interval for when text appears (in frames)
+      nextDisplay: random(60, 180), // Random interval for when text appears (in frames)
+      currentWord: "" // Store the current word to display for this rectangle
     });
   }
 
@@ -153,6 +155,8 @@ function draw() {
     if (rectangles[i].textTimer >= rectangles[i].nextDisplay) {
       // Show text for this rectangle
       rectangles[i].showText = true;
+      // Pick a random word from the words array
+      rectangles[i].currentWord = random(words);
       // Reset timer
       rectangles[i].textTimer = 0;
     }
@@ -167,16 +171,36 @@ function draw() {
       rectangles[i].textTimer = 0;
     }
     
-    // DRAW TEXT PHRASE
+    // DRAW TEXT BLOCK WITH CONNECTING LINE
     // if statement: check if text should be displayed for this rectangle
     if (rectangles[i].showText == true) {
+      // Calculate text block position (to the right of rectangle)
+      let textBlockX = rectangles[i].x + rectangles[i].size / 2 + 80;
+      let textBlockY = rectangles[i].y;
+      
+      // DRAW CONNECTING LINE
+      // Set stroke color to cyan
+      stroke(0, 255, 255);
+      strokeWeight(1);
+      // Draw line from rectangle edge to text block
+      line(rectangles[i].x + rectangles[i].size / 2, rectangles[i].y, textBlockX - 60, textBlockY);
+      
+      // DRAW TEXT BLOCK BACKGROUND
+      // Set fill color to semi-transparent black
+      fill(0, 0, 0, 150);
+      noStroke();
+      // Calculate text width for background sizing
+      textSize(14);
+      let textWidth = rectangles[i].currentWord.length * 10 + 20;
+      // Draw background rectangle for text
+      rect(textBlockX, textBlockY, textWidth, 30);
+      
+      // DRAW TEXT
       // Set text color to cyan
       fill(0, 255, 255);
       textSize(14);
-      // Display phrase above the rectangle
-      text("remember you too are in motion",
-        rectangles[i].x,
-        rectangles[i].y - rectangles[i].size / 2 - 15);
+      // Display the current word
+      text(rectangles[i].currentWord, textBlockX, textBlockY);
     }
   }
   // Use pop() to restore previous drawing settings
@@ -205,12 +229,12 @@ function draw() {
   // Display text that changes based on audio state
   fill(255, 0, 0);
   textAlign(LEFT, CENTER);
-  textSize(20);
+  textSize(18);
   // if statement: check if audio has started and is playing
   if (hasStarted == true && sound.isPlaying() == true) {
-    text("click to pause", mouseX + 15, mouseY);
+    text("CLICK TO PAUSE", mouseX + 15, mouseY);
   } else {
-    text("click to play", mouseX + 15, mouseY);
+    text("CLICK TO PLAY", mouseX + 15, mouseY);
   }
 }
 
