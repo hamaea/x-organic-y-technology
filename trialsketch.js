@@ -11,6 +11,7 @@
 let vid;
 let sound;
 let sound2; // Second audio file
+let sound3; // Third audio file
 let amp; // Amplitude analyzer to measure overall volume
 let fft; // FFT analyzer to measure frequency data
 let play = false; // Boolean to track play state
@@ -18,7 +19,7 @@ let rectangles = []; // Array to store all rectangle objects with their properti
 let videoIsPlaying = false; // Boolean to track if video is currently playing
 let hasStarted = false; // Boolean to track if audio has been started
 let words = ["freedom", "is", "now"]; // Array of words to display for song 1
-let currentSong = 1; // Track which song is currently playing (1 or 2)
+let currentSong = 1; // Track which song is currently playing (1, 2, or 3)
 let nextButton; // Button to switch to next audio
 
 function preload() {
@@ -26,6 +27,7 @@ function preload() {
   // This ensures the sounds are ready when the program begins
   sound = loadSound("assets/song01.mp3");
   sound2 = loadSound("assets/song03.mp3");
+  sound3 = loadSound("assets/song04.mp3");
 }
 
 function setup() {
@@ -66,7 +68,7 @@ function setup() {
   // Create button in top right corner to switch audio
   nextButton = createButton('NEXT AUDIO');
   // Position button in top right corner
-  nextButton.position(width - 150, 20);
+  nextButton.position(width - 180, 20);
   // Style the button
   nextButton.style('background-color', '#FF0000');
   nextButton.style('color', '#FFFFFF');
@@ -250,7 +252,7 @@ function draw() {
   textAlign(LEFT, CENTER);
   textSize(20);
   // if statement: check if audio has started and is playing
-  if (hasStarted == true && (sound.isPlaying() == true || sound2.isPlaying() == true)) {
+  if (hasStarted == true && (sound.isPlaying() == true || sound2.isPlaying() == true || sound3.isPlaying() == true)) {
     text("CLICK TO PAUSE", mouseX + 15, mouseY);
   } else {
     text("CLICK TO PLAY", mouseX + 15, mouseY);
@@ -258,9 +260,9 @@ function draw() {
 }
 
 // SWITCH AUDIO FUNCTION
-// Function that runs when "NEXT AUDIO" button is clicked
+// Function that runs when "EXPLORE MORE" button is clicked
 function switchAudio() {
-  // if statement: check which song is currently playing
+  // if statement: check which song is currently playing and cycle through
   if (currentSong == 1) {
     // Stop song 1 and play song 2
     sound.stop();
@@ -268,9 +270,16 @@ function switchAudio() {
     currentSong = 2;
     // Change words to "break the pattern" for song 2
     words = ["break", "the", "pattern"];
-  } else {
-    // Stop song 2 and play song 1
+  } else if (currentSong == 2) {
+    // Stop song 2 and play song 3
     sound2.stop();
+    sound3.loop();
+    currentSong = 3;
+    // Change words to "exist loudly" for song 3
+    words = ["exist", "loudly"];
+  } else {
+    // Stop song 3 and play song 1
+    sound3.stop();
     sound.loop();
     currentSong = 1;
     // Change words back to "freedom is now" for song 1
@@ -298,12 +307,19 @@ function touchStarted() {
     } else {
       sound.loop();
     }
-  } else {
+  } else if (currentSong == 2) {
     // if statement: check if song 2 is currently playing
     if (sound2.isPlaying()) {
       sound2.pause();
     } else {
       sound2.loop();
+    }
+  } else {
+    // if statement: check if song 3 is currently playing
+    if (sound3.isPlaying()) {
+      sound3.pause();
+    } else {
+      sound3.loop();
     }
   }
   
