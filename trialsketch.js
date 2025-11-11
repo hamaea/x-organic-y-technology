@@ -10,6 +10,7 @@
 // Video and audio elements
 let vid;
 let sound;
+let sound2; // Second audio file
 let amp; // Amplitude analyzer to measure overall volume
 let fft; // FFT analyzer to measure frequency data
 let play = false; // Boolean to track play state
@@ -17,11 +18,14 @@ let rectangles = []; // Array to store all rectangle objects with their properti
 let videoIsPlaying = false; // Boolean to track if video is currently playing
 let hasStarted = false; // Boolean to track if audio has been started
 let words = ["freedom", "is", "now"]; // Array of words to display
+let currentSong = 1; // Track which song is currently playing (1 or 2)
+let nextButton; // Button to switch to next audio
 
 function preload() {
-  // Load audio file before the sketch starts
-  // This ensures the sound is ready when the program begins
+  // Load audio files before the sketch starts
+  // This ensures the sounds are ready when the program begins
   sound = loadSound("assets/song01.mp3");
+  sound2 = loadSound("assets/song03.mp3");
 }
 
 function setup() {
@@ -57,6 +61,21 @@ function setup() {
   amp.smooth(0.9);
   // To create FFT analyzer to measure frequency spectrum data
   fft = new p5.FFT();
+
+  // CREATE BUTTON
+  // Create button in top right corner to switch audio
+  nextButton = createButton('NEXT AUDIO');
+  // Position button in top right corner
+  nextButton.position(width - 150, 20);
+  // Style the button
+  nextButton.style('background-color', '#FF0000');
+  nextButton.style('color', '#FFFFFF');
+  nextButton.style('border', 'none');
+  nextButton.style('padding', '10px 20px');
+  nextButton.style('font-size', '16px');
+  nextButton.style('cursor', 'pointer');
+  // Set what happens when button is clicked
+  nextButton.mousePressed(switchAudio);
 
   // CREATE RECTANGLES
   // To generate rectangles with random properties
@@ -218,8 +237,8 @@ function draw() {
   text("AMP: " + level.toFixed(4), 10, height - 90);
   // Display first frequency bin value from spectrum array
   text("FREQUENCY: " + spectrum[0], 10, height - 70);
-  // Display status of audio using sound.isPlaying value
-  text("AUDIO PLAYING: " + sound.isPlaying(), 10, height - 50);
+  // Display which song is currently playing
+  text("CURRENT SONG: " + currentSong, 10, height - 50);
   // Display video playing status using the videoIsPlaying boolean variable
   text("VIDEO PLAYING: " + videoIsPlaying, 10, height - 30);
   // Display current video playback time in seconds with 2 decimal places
@@ -231,11 +250,30 @@ function draw() {
   textAlign(LEFT, CENTER);
   textSize(20);
   // if statement: check if audio has started and is playing
-  if (hasStarted == true && sound.isPlaying() == true) {
+  if (hasStarted == true && (sound.isPlaying() == true || sound2.isPlaying() == true)) {
     text("CLICK TO PAUSE", mouseX + 15, mouseY);
   } else {
     text("CLICK TO PLAY", mouseX + 15, mouseY);
   }
+}
+
+// SWITCH AUDIO FUNCTION
+// Function that runs when "NEXT AUDIO" button is clicked
+function switchAudio() {
+  // if statement: check which song is currently playing
+  if (currentSong == 1) {
+    // Stop song 1 and play song 2
+    sound.stop();
+    sound2.loop();
+    currentSong = 2;
+  } else {
+    // Stop song 2 and play song 1
+    sound2.stop();
+    sound.loop();
+    currentSong = 1;
+  }
+  // Set hasStarted to true since audio is now playing
+  hasStarted = true;
 }
 
 // TOUCH INTERACTION
@@ -248,13 +286,23 @@ function touchStarted() {
   hasStarted = true;
 
   // TOGGLE AUDIO PLAYBACK
-  // if statement: check if sound is currently playing. If sound is playing, pause it
-  if (sound.isPlaying()) {
-    sound.pause();
+  // if statement: check which song is currently playing and pause/play accordingly
+  if (currentSong == 1) {
+    // if statement: check if song 1 is currently playing
+    if (sound.isPlaying()) {
+      sound.pause();
+    } else {
+      sound.loop();
+    }
   } else {
-    // If sound is not playing, start it and loop continuously
-    sound.loop();
+    // if statement: check if song 2 is currently playing
+    if (sound2.isPlaying()) {
+      sound2.pause();
+    } else {
+      sound2.loop();
+    }
   }
+  
   // Return false to prevent default touch behavior
   return false;
 }
