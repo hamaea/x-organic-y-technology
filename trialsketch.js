@@ -52,6 +52,7 @@ function setup() {
   // AUDIO ANALYSIS SETUP
   // To create amplitude analyzer to measure overall loudness (0 to 1)
   amp = new p5.Amplitude();
+  amp.smooth(0.9);
   // To create FFT analyzer to measure frequency spectrum data
   fft = new p5.FFT();
 
@@ -108,9 +109,9 @@ function draw() {
     // UPDATE POSITION
     // Move rectangle horizontally based on its speed and audio level
     // Multiplying by (1 + level * 20) makes movement faster when music is louder
-    rectangles[i].x += rectangles[i].speedX * (1 + level * 10);
+    rectangles[i].x += rectangles[i].speedX * (1 + level * 5);
     // Move rectangle vertically based on its speed and audio level
-    rectangles[i].y += rectangles[i].speedY * (1 + level * 10);
+    rectangles[i].y += rectangles[i].speedY * (1 + level * 5);
 
     // WRAP AROUND SCREEN EDGES
     // if statement: check if rectangle moves past right edge
