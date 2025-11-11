@@ -174,31 +174,31 @@ function draw() {
     // DRAW TEXT BLOCK WITH CONNECTING LINE
     // if statement: check if text should be displayed for this rectangle
     if (rectangles[i].showText == true) {
-      // Calculate text block position (to the right of rectangle) - LONGER DISTANCE
-      let textBlockX = rectangles[i].x + rectangles[i].size / 2 + 150;
+      // Calculate text block position (closer to rectangle)
+      let textBlockX = rectangles[i].x + rectangles[i].size / 2 + 80;
       let textBlockY = rectangles[i].y;
       
-      // DRAW CONNECTING LINE - LONGER LINE
+      // DRAW CONNECTING LINE - SHORTER
       // Set stroke color to cyan
       stroke(0, 255, 255);
-      strokeWeight(1);
+      strokeWeight(2);
       // Draw line from rectangle edge to text block
-      line(rectangles[i].x + rectangles[i].size / 2, rectangles[i].y, textBlockX - 80, textBlockY);
+      line(rectangles[i].x + rectangles[i].size / 2, rectangles[i].y, textBlockX - 40, textBlockY);
       
       // DRAW TEXT BLOCK BACKGROUND
-      // Set fill color to semi-transparent black
-      fill(0, 0, 0, 150);
+      // Set fill color to more visible semi-transparent black
+      fill(0, 0, 0, 200);
       noStroke();
-      // Calculate text width for background sizing - BIGGER TEXT
-      textSize(20);
-      let textWidth = rectangles[i].currentWord.length * 14 + 30;
-      // Draw background rectangle for text - BIGGER BOX
-      rect(textBlockX, textBlockY, textWidth, 40);
+      // Calculate text width for background sizing
+      textSize(24);
+      let textWidth = rectangles[i].currentWord.length * 16 + 40;
+      // Draw background rectangle for text
+      rect(textBlockX, textBlockY, textWidth, 50);
       
-      // DRAW TEXT - BIGGER SIZE
+      // DRAW TEXT
       // Set text color to cyan
       fill(0, 255, 255);
-      textSize(20);
+      textSize(24);
       // Display the current word
       text(rectangles[i].currentWord, textBlockX, textBlockY);
     }
@@ -232,9 +232,9 @@ function draw() {
   textSize(20);
   // if statement: check if audio has started and is playing
   if (hasStarted == true && sound.isPlaying() == true) {
-    text("click to pause", mouseX + 15, mouseY);
+    text("CLICK TO PAUSE", mouseX + 15, mouseY);
   } else {
-    text("click to play", mouseX + 15, mouseY);
+    text("CLICK TO PLAY", mouseX + 15, mouseY);
   }
 }
 
